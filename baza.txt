@@ -1,0 +1,216 @@
+CREATE TABLE `grad` (
+  `sifraGrada` int NOT NULL AUTO_INCREMENT,
+  `nazivGrada` varchar(30) NOT NULL,
+  PRIMARY KEY (`sifraGrada`)
+) ;
+insert  into `grad`(`sifraGrada`,`nazivGrada`) values 
+(1,'Beograd'),
+(2,'Novi Sad'),
+(3,'Nis'),
+(4,'Kragujevac'),
+(5,'Subotica'),
+(6,'Kraljevo'),
+(7,'Pozarevac'),
+(8,'Sombor'),
+(9,'Leskovac'),
+(10,'Smederevo'),
+(11,'Novi Pazar'),
+(12,'Pancevo'),
+(13,'Pirot'),
+(14,'Negotin');
+
+CREATE TABLE `izdavac` (
+  `sifraIzdavaca` int NOT NULL AUTO_INCREMENT,
+  `nazivIzdavaca` varchar(20) NOT NULL,
+  `sifraGrada` int NOT NULL,
+  PRIMARY KEY (`sifraIzdavaca`),
+  KEY `sifraGrada` (`sifraGrada`),
+  CONSTRAINT `izdavac_ibfk_1` FOREIGN KEY (`sifraGrada`) REFERENCES `grad` (`sifraGrada`) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+insert  into `izdavac`(`sifraIzdavaca`,`nazivIzdavaca`,`sifraGrada`) values 
+(1,'Laguna',2),
+(2,'Vulkan',1),
+(3,'Agora',3),
+(4,'CET',5),
+(5,'Feniks d.o.o',6),
+(6,'Kosmos',1),
+(7,'CLIO',1),
+(8,'Dereta',3);
+
+CREATE TABLE `dobavljac` (
+  `sifraDobavljaca` int NOT NULL AUTO_INCREMENT,
+  `nazivDobavljaca` varchar(20) NOT NULL,
+  `sifraGrada` int NOT NULL,
+  PRIMARY KEY (`sifraDobavljaca`),
+  KEY `sifraGrada` (`sifraGrada`),
+  CONSTRAINT `dobavljac_ibfk_1` FOREIGN KEY (`sifraGrada`) REFERENCES `grad` (`sifraGrada`) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+insert  into `dobavljac`(`sifraDobavljaca`,`nazivDobavljaca`,`sifraGrada`) values 
+(1,'Laguna',2),
+(2,'Vulkan',1),
+(3,'EDEN books',1),
+(4,'Naled',4),
+(5,'Mikro knjiga',4);
+
+CREATE TABLE `bibliotekar` (
+  `sifraBibliotekara` int NOT NULL AUTO_INCREMENT,
+  `imeBibliotekara` varchar(20) NOT NULL,
+  `prezimeBibliotekara` varchar(20) NOT NULL,
+  `emailBibliotekara` varchar(20) NOT NULL,
+  `lozinkaBibliotekara` varchar(20) NOT NULL,
+  `sifraGrada` int NOT NULL,
+  PRIMARY KEY (`sifraBibliotekara`),
+  KEY `sifraGrada` (`sifraGrada`),
+  CONSTRAINT `bibliotekar_ibfk_1` FOREIGN KEY (`sifraGrada`) REFERENCES `grad` (`sifraGrada`) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+insert  into `bibliotekar`(`sifraBibliotekara`,`imeBibliotekara`,`prezimeBibliotekara`,`emailBibliotekara`,`lozinkaBibliotekara`,`sifraGrada`) values 
+(1,'Ivan','Boskovic','ivan.biblio.com','ivan0',1),
+(2,'Bojan','Ninkovic','bojan.biblio.com','bojan0',2),
+(3,'Marina','Djekic','marina.biblio.com','marina0',1);
+
+CREATE TABLE `clan` (
+  `sifraClana` int NOT NULL AUTO_INCREMENT,
+  `imeClana` varchar(20) NOT NULL,
+  `prezimeClana` varchar(20) NOT NULL,
+  `telefonClana` varchar(13) NOT NULL,
+  `vrstaClanskeKarte` varchar(10) NOT NULL,
+  `aktivnostClanstva` tinyint(1) NOT NULL,
+  `emailClana` varchar(30) NOT NULL,
+  `lozinkaClana` varchar(30) NOT NULL,
+  `sifraGrada` int NOT NULL,
+  PRIMARY KEY (`sifraClana`),
+  KEY `sifraGrada` (`sifraGrada`),
+  CONSTRAINT `clan_ibfk_1` FOREIGN KEY (`sifraGrada`) REFERENCES `grad` (`sifraGrada`) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+insert  into `clan`(`sifraClana`,`imeClana`,`prezimeClana`,`telefonClana`,`vrstaClanskeKarte`,`aktivnostClanstva`,`emailClana`,`lozinkaClana`,`sifraGrada`) values 
+(1,'Ivana','Nikolic','067-123-4567','Zaposlen',1,'ivana@gmail.com','ivana123',2),
+(2,'Marko','Ivanovic','060-123-4567','Student',1,'marko@gmail.com','marko123',3),
+(3,'Marko','Markovic','061-234-5678','Student',1,'marko.mar@gmail.com','marko3',5),
+(4,'Nikola','Pavlovic','063-456-7890','Penzioner',0,'nidza.kralj.com','nidzakralj',8),
+(5,'Zarko','Petrovic','062-123-1234','Penzioner',1,'zarko@gmail.com','zarko123',3),
+(6,'Ranko','Jovanovi','069-345-6789','Zaposlen',0,'ranko@gmail.com','rank123',1);
+
+CREATE TABLE `knjiga` (
+  `sifraKnjige` int NOT NULL AUTO_INCREMENT,
+  `nazivKnjige` varchar(20) NOT NULL,
+  `godinaIzdavanja` int NOT NULL,
+  `zanrKnjige` varchar(15) NOT NULL,
+  `sifraIzdavaca` int NOT NULL,
+  `autorKnjige` varchar(100) NOT NULL,
+  PRIMARY KEY (`sifraKnjige`),
+  KEY `sifraIzdavaca` (`sifraIzdavaca`),
+  CONSTRAINT `knjiga_ibfk_1` FOREIGN KEY (`sifraIzdavaca`) REFERENCES `izdavac` (`sifraIzdavaca`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ;
+
+insert  into `knjiga`(`sifraKnjige`,`nazivKnjige`,`godinaIzdavanja`,`zanrKnjige`,`sifraIzdavaca`,`autorKnjige`) values 
+(1,'Seobe',1927,'roman',3,'Milos Crnjanski'),
+(2,'Gorski Vjenac',1889,'istorijski',3,'Petar Petrovic II Njegos '),
+(3,'Cica Gorio',1910,'biografija',2,'Onore de Balzak'),
+(4,'Romeo i Julija',1927,'ljubavni',1,'Vilijem Sekspir'),
+(5,'Seobe',1927,'roman',3,'Milos Crnjanski'),
+(6,'Gorski Vjenac',1889,'istorijski',3,'Petar Petrovic II Njegos'),
+(7,'Kancionier',1312,'ljubavni',5,'Francesko Pertrarka'),
+(8,'Moj Beograd',2019,'istorijski',1,'Goran Vesic'),
+(9,'Rat i mir',1869,'istorijski',1,'Lav Tolstoj'),
+(10,'Rat i mir',1869,'istorijski',1,'Lav Tolstoj'),
+(11,'Ana Karenjina',1877,'ljubavni',6,'Lav Tolstoj'),
+(12,'Ana Karenjina',1877,'ljubavni',5,'Lav Tolstoj'),
+(13,'Ana Karenjina',1877,'ljubavni',1,'Lav Tolstoj'),
+(14,'Veliki Getsbi',1925,'roman',8,'Scott Fitzgerald'),
+(15,'Uliks',1922,'roman',7,'Dzems Dzojs'),
+(16,'Javna Tajna',1870,'ljubavni',6,'Viktorijanac Mol'),
+(17,'Razum i osecajnost',1811,'ljubavni',4,'Dzejn Ostin'),
+(18,'Sto godina samoce',1967,'roman',5,'Gabriel Garsija Markes'),
+(19,'Sto godina samoce',1967,'roman',5,'Gabriel Garsija Markes'),
+(20,'Ratni dnevnik',1947,'biografija',2,'Ana Frank'),
+(21,'Ratni dnevnik',1947,'biografija',2,'Ana Frank'),
+(22,'Autobiografija B.F',1791,'biografija',4,'Benjamin Franklin'),
+(23,'Drakula',1897,'horor',5,'Brem Stoker'),
+(24,'Drakula',1897,'horor',5,'Brem Stoker'),
+(25,'The Exorcist',1971,'horor',3,'Vilijam Piter Blati'),
+(26,'Zlocin i kazna',1866,'roman',1,'Fjodor Dostojevski'),
+(27,'Zlocin i kazna',1866,'roman',1,'Fjodor Dostojevski');
+
+CREATE TABLE `narudzbenica` (
+  `sifraNarudzbenice` int NOT NULL AUTO_INCREMENT,
+  `datumNarucivanja` date NOT NULL,
+  `sifraBibliotekara` int NOT NULL,
+  `sifraDobavljaca` int NOT NULL,
+  PRIMARY KEY (`sifraNarudzbenice`),
+  KEY `sifraBibliotekara` (`sifraBibliotekara`),
+  KEY `sifraDobavljaca` (`sifraDobavljaca`),
+  CONSTRAINT `narudzbenica_ibfk_1` FOREIGN KEY (`sifraBibliotekara`) REFERENCES `bibliotekar` (`sifraBibliotekara`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `narudzbenica_ibfk_2` FOREIGN KEY (`sifraDobavljaca`) REFERENCES `dobavljac` (`sifraDobavljaca`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ;
+insert  into `narudzbenica`(`sifraNarudzbenice`,`datumNarucivanja`,`sifraBibliotekara`,`sifraDobavljaca`) values 
+(1,'2023-02-17',1,2),
+(2,'1111-01-01',1,1),
+(3,'2023-02-17',1,2),
+(4,'1111-01-01',1,1),
+(5,'1111-01-01',1,1),
+(6,'2023-02-18',1,3),
+(7,'2023-02-18',1,2),
+(8,'1111-01-01',1,1);
+
+CREATE TABLE `rezervacija` (
+  `sifraRezervacije` int NOT NULL AUTO_INCREMENT,
+  `datumIznamljivanja` date NOT NULL,
+  `datumVracanja` date NOT NULL,
+  `aktivnostRezervacije` tinyint(1) NOT NULL,
+  `sifraClana` int NOT NULL,
+  `sifraBibliotekara` int NOT NULL,
+  PRIMARY KEY (`sifraRezervacije`),
+  KEY `sifraClana` (`sifraClana`),
+  KEY `sifraBibliotekara` (`sifraBibliotekara`),
+  CONSTRAINT `rezervacija_ibfk_1` FOREIGN KEY (`sifraClana`) REFERENCES `clan` (`sifraClana`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `rezervacija_ibfk_2` FOREIGN KEY (`sifraBibliotekara`) REFERENCES `bibliotekar` (`sifraBibliotekara`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `rezervacija_chk_1` CHECK ((`datumVracanja` > `datumIznamljivanja`))
+);
+insert  into `rezervacija`(`sifraRezervacije`,`datumIznamljivanja`,`datumVracanja`,`aktivnostRezervacije`,`sifraClana`,`sifraBibliotekara`) values 
+(1,'2023-02-15','2023-03-15',1,1,1),
+(2,'1111-01-01','9999-09-09',1,1,1),
+(3,'1111-01-01','9999-09-09',1,1,1),
+(4,'1111-01-01','9999-09-09',1,1,1),
+(5,'2023-06-04','2023-07-04',1,1,1),
+(6,'2023-03-12','2023-04-13',0,4,1),
+
+
+CREATE TABLE `stavka_narudzbenice` (
+  `sifraNarudzbenice` int NOT NULL,
+  `sifraStavke` int NOT NULL,
+  `kolicina` int NOT NULL,
+  `sifraKnjige` int NOT NULL,
+  PRIMARY KEY (`sifraNarudzbenice`,`sifraStavke`),
+  KEY `sifraKnjige` (`sifraKnjige`),
+  CONSTRAINT `stavka_narudzbenice_ibfk_1` FOREIGN KEY (`sifraNarudzbenice`) REFERENCES `narudzbenica` (`sifraNarudzbenice`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `stavka_narudzbenice_ibfk_2` FOREIGN KEY (`sifraKnjige`) REFERENCES `knjiga` (`sifraKnjige`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `stavka_narudzbenice_chk_1` CHECK ((`kolicina` > 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `stavka_narudzbenice` */
+
+insert  into `stavka_narudzbenice`(`sifraNarudzbenice`,`sifraStavke`,`kolicina`,`sifraKnjige`) values 
+(1,1,6,1),
+(1,2,2,2),
+(3,1,4,7),
+(6,1,8,4),
+(7,1,2,4);
+
+CREATE TABLE `stavka_rezervacije` (
+  `sifraRezervacije` int NOT NULL,
+  `sifraStavke` int NOT NULL,
+  `sifraKnjige` int NOT NULL,
+  PRIMARY KEY (`sifraRezervacije`,`sifraStavke`),
+  KEY `sifraKnjige` (`sifraKnjige`),
+  CONSTRAINT `stavka_rezervacije_ibfk_1` FOREIGN KEY (`sifraRezervacije`) REFERENCES `rezervacija` (`sifraRezervacije`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `stavka_rezervacije_ibfk_2` FOREIGN KEY (`sifraKnjige`) REFERENCES `knjiga` (`sifraKnjige`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `stavka_rezervacije` */
+
+insert  into `stavka_rezervacije`(`sifraRezervacije`,`sifraStavke`,`sifraKnjige`) values 
+(5,1,1),
+(1,1,3),
+(6,2,5),
+(6,1,8);
